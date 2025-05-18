@@ -2,203 +2,207 @@
 <html>
 
 <head>
+
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Budget Tracker</title>
-  <style>
-    *{
-        box-sizing: border-box;
-        margin: 0;
-        padding:0;
-        font-family:sans-serif;
-    }
 
-    body{
-        background :linear-gradient(to right, #e0f7fa, #f1f8ff);
-        padding: 20px;
-        color: #333;
-    }
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: sans-serif;
+        }
 
-    .container{
-        max-width:850px;
-        margin: auto;
-        background-color: #FFFFFF;
-        padding:25px;
-        border-radius: 12px;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-    }
+        body {
+            background: linear-gradient(to right, #e0f7fa, #f1f8ff);
+            padding: 20px;
+            color: #333;
+        }
 
-    h2{
-        text-align: center;
-        margin-bottom: 25px;
-        font-size : 28px;
-        color: #007BFF
-    }
+        .container {
+            max-width: 850px;
+            margin: auto;
+            background-color: #FFFFFF;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+        }
 
-    .summary{
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 25px;
-        gap: 15px;
-    }
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 28px;
+            color: #007BFF
+        }
 
-    .summary div{
-        flex: 1;
-        padding: 15px;
-        border-radius: 10px;
-        text-align: center;
-        font-size: 16px;
-        font-weight: bold;
-        color: #FFFFFF;
-    }
+        .summary {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 25px;
+            gap: 15px;
+        }
 
-    .income{
-        background-color: #71c4b6;
-    }
+        .summary div {
+            flex: 1;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
+            color: #FFFFFF;
+        }
 
-    .expense{
-        background-color: #DC3545
-    }
+        .income {
+            background-color: #71c4b6;
+        }
 
-    .balance{
-        background-color: #17A2B8;
-    }
+        .expense {
+            background-color: #DC3545
+        }
 
-    form{
-        display: flex;
-        flex-wrap: wrap;
-        gap: 15px;
-        margin-bottom: 25px;
-    }
+        .balance {
+            background-color: #17A2B8;
+        }
 
-    input[type="text"],
-input[type="number"] {
-    flex: 1 1 45%;
-    padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    background: #f9f9f9;
-}
+        form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
 
-.controls{
-    flex: 1 1 100%;
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    padding-left: 5px;
-    font-size: 15px;
-}
+        input[type="text"],
+        input[type="number"] {
+            flex: 1 1 45%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background: #f9f9f9;
+        }
 
-.buttons{
-    flex: 1 1 100%;
-    display: flex;
-    gap: 10px;
-    justify-content: flex-start;
-    margin-top: 5px;
-}
+        .controls {
+            flex: 1 1 100%;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding-left: 5px;
+            font-size: 15px;
+        }
 
-button{
-    padding: 10px 20px;
-    border:none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 600;
-    transition: background 0.3s ease;
-}
+        .buttons {
+            flex: 1 1 100%;
+            display: flex;
+            gap: 10px;
+            justify-content: flex-start;
+            margin-top: 5px;
+        }
 
-button .add{
-    background-color: #007BFF;
-    color:#FFFFFF;
-}
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: background 0.3s ease;
+        }
 
-button.add:hover {
-    background-color: #0056b3;
-}
+        button .add {
+            background-color: #007BFF;
+            color: #FFFFFF;
+        }
 
-button.reset {
-    background-color: #6c757d;
-    color: #fff;
-}
+        button.add:hover {
+            background-color: #0056b3;
+        }
 
-button.reset:hover {
-    background-color: #5a6268;
-}
+        button.reset {
+            background-color: #6c757d;
+            color: #fff;
+        }
 
-div label{
-    font-weight : 600;
-    margin-right: 10px;
-}
+        button.reset:hover {
+            background-color: #5a6268;
+        }
 
-input[type="radio"]{
-    margin-right: 5px;
-}
+        div label {
+            font-weight: 600;
+            margin-right: 10px;
+        }
 
-ul{
-    list-style: none;
-    padding-left: 0;
-}
+        input[type="radio"] {
+            margin-right: 5px;
+        }
 
-.entry {
-    background: #f4f7fa;
-    margin: 12px 0;
-    padding: 15px;
-    border-radius: 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-left: 5px solid #007bff;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-}
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
 
-.entry span{
-    flex: 1;
-    font-size: 15px;
-}
+        .entry {
+            background: #f4f7fa;
+            margin: 12px 0;
+            padding: 15px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 5px solid #007bff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
 
-.entry button{
-    margin-left:10px;
-    padding: 6px 12px;
-    background-color: #007BFF;
-    color: #FFFFFF;
-    border-radius: 5px;
-    font-size: 13px;
-}
+        .entry span {
+            flex: 1;
+            font-size: 15px;
+        }
 
-.entry button:hover {
-    background: #0056b3;
-}
+        .entry button {
+            margin-left: 10px;
+            padding: 6px 12px;
+            background-color: #007BFF;
+            color: #FFFFFF;
+            border-radius: 5px;
+            font-size: 13px;
+        }
 
-@media(max-width: 600px) {
-    .summary {
-        flex-direction: column;
-        gap: 10px;
-    }
+        .entry button:hover {
+            background: #0056b3;
+        }
 
-    form {
-        flex-direction: column;
-    }
+        @media(max-width: 600px) {
+            .summary {
+                flex-direction: column;
+                gap: 10px;
+            }
 
-    input[type="text"],
-    input[type="number"] {
-        flex: 1 1 100%;
-    }
+            form {
+                flex-direction: column;
+            }
 
-    .controls,
-    .buttons {
-        flex-direction: column;
-        align-items: flex-start;
-    }
+            input[type="text"],
+            input[type="number"] {
+                flex: 1 1 100%;
+            }
 
-    .entry {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
-    }
+            .controls,
+            .buttons {
+                flex-direction: column;
+                align-items: flex-start;
+            }
 
-    .entry span {
-        width: 100%;
-    }
-}
-  </style>
+            .entry {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .entry span {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -217,7 +221,7 @@ ul{
                 <label><input type="radio" name="type" value="expense"> Expense</label>
             </div>
             <div class="buttons">
-                <button type="submit" class="add" >Add Entry</button>
+                <button type="submit" class="add">Add Entry</button>
                 <button type="button" class="reset" onclick="resetForm()">Reset</button>
             </div>
         </form>
@@ -242,9 +246,9 @@ ul{
         var amount = document.getElementById("amount");
         var list = document.getElementById("entryList");
 
-        function addEntry(){
-            if(description.value == '' && amount.value == ''){
-                
+        function addEntry() {
+            if (description.value == '' && amount.value == '') {
+
             }
         }
 
@@ -346,14 +350,14 @@ ul{
             resetForm();
         });
 
-        function getFilterValue(){
+        function getFilterValue() {
             return document.querySelector('input[name="filter"]:checked').value
         }
 
 
         var filters = document.querySelectorAll('input[name = "filter"]');
-        for(var i=0; i < filters.length; i++){
-            filters[i].addEventListener('change', function(){
+        for (var i = 0; i < filters.length; i++) {
+            filters[i].addEventListener('change', function () {
                 filterEntries(getFilterValue());
             });
 
