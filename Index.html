@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Budget Tracker</title>
+  <style>
+    *{
+        box-sizing: border-box;
+        margin: 0;
+        padding:0;
+        font-family:sans-serif;
+    }
+
+    body{
+        background :linear-gradient(to right, #e0f7fa, #f1f8ff);
+        padding: 20px;
+        color: #333;
+    }
+
+    .container{
+        max-width:850px;
+        margin: auto;
+        background-color: #FFFFFF;
+        padding:25px;
+        border-radius: 12px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    }
+
+    h2{
+        text-align: center;
+        margin-bottom: 25px;
+        font-size : 28px;
+        color: #007BFF
+    }
+
+    .summary{
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 25px;
+        gap: 15px;
+    }
+
+    .summary div{
+        flex: 1;
+        padding: 15px;
+        border-radius: 10px;
+        text-align: center;
+        font-size: 16px;
+        font-weight: bold;
+        color: #FFFFFF;
+    }
+
+    .income{
+        background-color: #71c4b6;
+    }
+
+    .expense{
+        background-color: #DC3545
+    }
+
+    .balance{
+        background-color: #17A2B8;
+    }
+
+    form{
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin-bottom: 25px;
+    }
+
+    input[type="text"],
+input[type="number"] {
+    flex: 1 1 45%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background: #f9f9f9;
+}
+
+.controls{
+    flex: 1 1 100%;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding-left: 5px;
+    font-size: 15px;
+}
+
+.buttons{
+    flex: 1 1 100%;
+    display: flex;
+    gap: 10px;
+    justify-content: flex-start;
+    margin-top: 5px;
+}
+
+button{
+    padding: 10px 20px;
+    border:none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: background 0.3s ease;
+}
+
+button .add{
+    background-color: #007BFF;
+    color:#FFFFFF;
+}
+
+button.add:hover {
+    background-color: #0056b3;
+}
+
+button.reset {
+    background-color: #6c757d;
+    color: #fff;
+}
+
+button.reset:hover {
+    background-color: #5a6268;
+}
+
+div label{
+    font-weight : 600;
+    margin-right: 10px;
+}
+
+input[type="radio"]{
+    margin-right: 5px;
+}
+
+ul{
+    list-style: none;
+    padding-left: 0;
+}
+
+.entry {
+    background: #f4f7fa;
+    margin: 12px 0;
+    padding: 15px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-left: 5px solid #007bff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.entry span{
+    flex: 1;
+    font-size: 15px;
+}
+
+.entry button{
+    margin-left:10px;
+    padding: 6px 12px;
+    background-color: #007BFF;
+    color: #FFFFFF;
+    border-radius: 5px;
+    font-size: 13px;
+}
+
+.entry button:hover {
+    background: #0056b3;
+}
+
+@media(max-width: 600px) {
+    .summary {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    form {
+        flex-direction: column;
+    }
+
+    input[type="text"],
+    input[type="number"] {
+        flex: 1 1 100%;
+    }
+
+    .controls,
+    .buttons {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .entry {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .entry span {
+        width: 100%;
+    }
+}
+  </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Income Expense Tracker</h2>
+        <div class="summary">
+            <div class="income">Income: <span id="totalIncome">0</span></div>
+            <div class="expense">Expense: <span id="totalExpense">0</span></div>
+            <div class="balance">Balance: <span id="totalBalance">0</span></div>
+        </div>
+        <form id="dataEntries">
+            <input type="text" id="description" placeholder="Description" required>
+            <input type="number" id="amount" placeholder="Amount" required>
+            <div class="controls">
+                <label><input type="radio" name="type" value="income" checked> Income</label>
+                <label><input type="radio" name="type" value="expense"> Expense</label>
+            </div>
+            <div class="buttons">
+                <button type="submit" class="add" >Add Entry</button>
+                <button type="button" class="reset" onclick="resetForm()">Reset</button>
+            </div>
+        </form>
+        <div>
+            <label>Filter</label>
+            <label><input type="radio" name="filter" value="all" checked>All</label>
+            <label><input type="radio" name="filter" value="income">Income</label>
+            <label><input type="radio" name="filter" value="expense">Expense</label>
+        </div>
+        <ul id="entryList"></ul>
+    </div>
+    <script>
+
+        var entries = JSON.parse(localStorage.getItem('dataEntries')) || [];
+        var currentEditId = null;
+
+        var totalIncome = document.getElementById("totalIncome");
+        var totalExpense = document.getElementById("totalExpense");
+        var totalBalance = document.getElementById("totalBalance");
+        var form = document.getElementById("dataEntries");
+        var description = document.getElementById("description");
+        var amount = document.getElementById("amount");
+        var list = document.getElementById("entryList");
+
+        function addEntry(){
+            if(description.value == '' && amount.value == ''){
+                
+            }
+        }
+
+        function resetForm() {
+            description.value = '';
+            amount.value = '';
+            form.querySelector('input[name = "type"][value = "income"]').checked = true;
+            currentEditId = null;
+        }
+
+        function updateTotal() {
+            var income = 0;
+            for (var i = 0; i < entries.length; i++) {
+                if (entries[i].type === 'income') {
+                    income += Number(entries[i].amount);
+                }
+            }
+
+            var expense = 0;
+            for (var i = 0; i < entries.length; i++) {
+                if (entries[i].type === 'expense') {
+                    expense += Number(entries[i].amount);
+                }
+            }
+
+            totalIncome.textContent = income;
+            totalExpense.textContent = expense;
+            totalBalance.textContent = income - expense;
+        }
+
+        function filterEntries(filter) {
+            if (typeof filter === "undefined")
+                filter = 'all';
+
+            list.innerHTML = '';
+
+            for (var i = 0; i < entries.length; i++) {
+
+                if (filter === 'all' || entries[i].type === filter) {
+                    var li = document.createElement('li');
+
+                    li.className = 'entry';
+                    li.innerHTML = `<span>${entries[i].description}</span>
+                <span>${entries[i].amount}</span>
+                <span>${entries[i].type}</span>
+                <button onclick="editData('${entries[i].id}')">Edit</button>
+                <button onclick="deleteData('${entries[i].id}')">Delete</button>
+                    `;
+
+                    list.appendChild(li);
+
+                }
+            }
+            updateTotal();
+        }
+
+        function saveEntries() {
+            localStorage.setItem('dataEntries', JSON.stringify(entries));
+        }
+
+        function editData(id) {
+            for (var i = 0; i < entries.length; i++) {
+                if (entries[i].id === id) {
+                    description.value = entries[i].description;
+                    amount.value = entries[i].amount;
+                    form.querySelector('input[name="type"][value="' + entries[i].type + '"]').checked = true;
+                    currentEditId = id;
+                }
+            }
+        }
+        function deleteData(id) {
+            entries = entries.filter(e => e.id !== id);
+            saveEntries();
+            filterEntries(getFilterValue());
+        }
+
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            var newEntries = {
+                id: currentEditId || Date.now().toString(),
+                description: description.value,
+                amount: parseFloat(amount.value).toFixed(2),
+                type: form.querySelector('input[name="type"]:checked').value
+            };
+
+            if (currentEditId) {
+                for (var i = 0; i < entries.length; i++) {
+                    if (entries[i].id === currentEditId) {
+                        entries[i] = newEntries;
+                    }
+                }
+            } else {
+                entries.push(newEntries);
+            }
+
+            saveEntries();
+            filterEntries(getFilterValue());
+            resetForm();
+        });
+
+        function getFilterValue(){
+            return document.querySelector('input[name="filter"]:checked').value
+        }
+
+
+        var filters = document.querySelectorAll('input[name = "filter"]');
+        for(var i=0; i < filters.length; i++){
+            filters[i].addEventListener('change', function(){
+                filterEntries(getFilterValue());
+            });
+
+            filterEntries();
+        }
+
+    </script>
+</body>
+
+</html>
